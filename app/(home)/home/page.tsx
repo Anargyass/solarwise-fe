@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getNominatimReverseUrl, apiConfig } from "@/app/lib/api-config";
 
 export default function HomePage() {
   const [location, setLocation] = useState("");
@@ -38,7 +39,7 @@ export default function HomePage() {
 
         try {
           const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`,
+            getNominatimReverseUrl(coords.latitude, coords.longitude),
           );
 
           if (!response.ok) {

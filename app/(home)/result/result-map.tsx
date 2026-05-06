@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
+import { apiConfig } from "@/app/lib/api-config";
 
 export default function ResultMap({
   coordinates,
@@ -17,8 +18,8 @@ export default function ResultMap({
       className="h-80 w-full sm:h-88 lg:h-104"
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution={apiConfig.map.attribution}
+        url={apiConfig.map.tileUrl}
       />
       <CircleMarker
         center={[coordinates.lat, coordinates.lng]}

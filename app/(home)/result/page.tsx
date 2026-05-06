@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from 'react'
 import { useEffect, useState } from "react";
+import { getSimulationUrl, getPhotonSearchUrl, apiConfig } from "@/app/lib/api-config";
 
 type ResultMapProps = {
   coordinates: { lat: number; lng: number };
@@ -392,7 +393,7 @@ export default function ResultPage() {
 
           try {
             const geoResponse = await fetch(
-              `https://photon.komoot.io/api/?q=${encodeURIComponent(lokasi)}&limit=1`,
+              getPhotonSearchUrl(lokasi),
               { signal: controller.signal }
             );
 
@@ -443,7 +444,7 @@ export default function ResultPage() {
           const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
           try {
-            const response = await fetch("http://localhost:8080/api/v1/simulation", {
+            const response = await fetch(getSimulationUrl(), {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -590,7 +591,7 @@ export default function ResultPage() {
                 <p className="mt-2 text-sm text-red-700">{getErrorDescription(error)}</p>
                 {error.type === "API" && (
                   <p className="mt-2 text-xs text-red-600">
-                    💡 Tip: Pastikan backend server berjalan di http://localhost:8080
+                    💡 Tip: Pastikan backend server berjalan di {apiConfig.simulation.baseUrl}
                   </p>
                 )}
               </div>
