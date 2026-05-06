@@ -78,26 +78,27 @@ curl -X POST http://localhost:8080/v1/simulation \
 
 ## Getting Started
 ### Prerequisites
-- Go 1.22+
-- Node.js dan pnpm/npm (jika menjalankan frontend SolarWise)
+- Node.js 20.9+
+- pnpm (direkomendasikan) atau npm/yarn/bun
 
-### Setup Backend
+### Setup Frontend (Next.js)
 ```bash
-git clone https://github.com/username/solarwise-be.git
-cd solarwise-be
-go mod download
+pnpm install
+pnpm dev
 ```
 
-### Menjalankan Backend (Go)
+### Akses Aplikasi
+- Buka http://localhost:3000
+
+### Build dan Jalankan Production
 ```bash
-go run ./cmd/api
+pnpm build
+pnpm start
 ```
 
-### Smoke Test
+### Lint
 ```bash
-curl -X POST http://localhost:8080/v1/simulation \
-  -H "Content-Type: application/json" \
-  -d '{"lokasi":"Jakarta","tagihan_bulanan":1500000}'
+pnpm lint
 ```
 
 ## Struktur Proyek
