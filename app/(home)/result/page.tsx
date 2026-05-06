@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react'
 import { useEffect, useState } from "react";
 
 type ResultMapProps = {
