@@ -1,31 +1,41 @@
 @import "tailwindcss";
-
-:root {
-  --background: #eef6f8;
-  --foreground: #0e2530;
-}
+@import "leaflet/dist/leaflet.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-body);
+  --font-sans: var(--font-montserrat);
+  --color-primary-cream: #FFF6D1;
+  --color-primary-green: #062E2A;
+}
+
+html,
+body {
+  min-height: 100vh;
 }
 
 body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(93, 176, 199, 0.2), transparent 40%),
-    radial-gradient(circle at 90% 100%, rgba(252, 193, 107, 0.26), transparent 35%),
-    linear-gradient(180deg, #f7fbfc 0%, #e9f2f4 100%);
-  color: var(--foreground);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
+  background-color: #fff6d1;
+  color: #062E2A;
+}
+
+*::selection,
+::selection {
+  background: #062E2A;
+  color: #fff6d1;
+}
+
+*::-moz-selection,
+::-moz-selection {
+  background: #062E2A;
+  color: #fff6d1;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-heading), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 700;
 }
 
 .hero-glow {

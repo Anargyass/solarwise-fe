@@ -20,6 +20,12 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Theme Switching
+
+-- The theme system uses color inversion between `brand-cream` (#FFF6D1) and `brand-green` (#062E2A) via Tailwind `dark` classes.
+- The toggle button lives inside the navbar capsule and updates the `dark` class on `<html>` with localStorage persistence.
+- An inline script in the root layout applies the saved theme before paint to avoid flicker.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

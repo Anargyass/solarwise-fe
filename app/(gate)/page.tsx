@@ -2,52 +2,39 @@ import Link from "next/link";
 
 export default function GatePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      {/* Ambient glows */}
-      <div className="hero-glow hero-glow-left" aria-hidden />
-      <div className="hero-glow hero-glow-right" aria-hidden />
-
-      {/* Decorative grid background */}
-      <div
-        className="absolute inset-0 -z-10 opacity-30"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-        aria-hidden
-      />
-
+    <main className="relative flex min-h-screen flex-col overflow-hidden bg-[#fff6d1] text-[#003631]">
       {/* Hero Section */}
-      <section className="relative px-4 py-16 sm:px-8 lg:px-16">
+      <section className="relative flex-1 px-4 py-16 sm:px-8 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col items-center gap-8">
-            {/* Top Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 backdrop-blur-sm">
-              <span className="inline-flex h-2 w-2 rounded-full bg-teal-500" />
-              <span className="text-xs font-medium tracking-wide text-slate-700 uppercase">
+            
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#003631]/20 bg-white px-4 py-2">
+              <span className="inline-flex h-2 w-2 rounded-full bg-[#003631]" />
+              <span className="text-xs font-bold uppercase tracking-wide">
                 Energy Decision Platform
               </span>
             </div>
 
-            {/* Main Headline */}
+            {/* Hero Text */}
             <div className="text-center">
-              <h1 className="text-balance bg-gradient-to-br from-slate-950 via-slate-800 to-slate-700 bg-clip-text text-5xl font-bold leading-tight text-transparent sm:text-6xl lg:text-7xl">
-                Transformasi Energi Dimulai dari Keputusan yang Tepat
+              <h1 className="text-balance text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
+                Apakah Panel Surya Layak untuk Rumahmu?
               </h1>
-              <p className="mt-6 text-balance text-base leading-relaxed text-slate-700 sm:text-lg">
-                SolarWise mengubah kompleksitas analisis teknis menjadi rekomendasi investasi yang jelas, 
-                berbasis data lokasi, finansial, dan proyeksi ROI yang transparan. 
-                Untuk rumah tangga dan UMKM yang ingin mengambil langkah nyata.
+              <p className="mt-6 text-balance text-base leading-relaxed sm:text-lg">
+                Masukkan lokasi dan tagihan listrikmu. SolarWise menjalankan engine
+                multi-skenario yang mengevaluasi beberapa kapasitas panel dan memilih
+                skenario terbaik berdasarkan ROI dan coverage.
               </p>
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Button */}
             <div className="flex flex-col items-center gap-4">
               <Link
                 href="/home"
-                className="group relative inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 px-8 text-base font-semibold text-white shadow-lg shadow-teal-500/30 transition-all hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-1 active:translate-y-0"
+                className="group relative inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-[#003631] px-8 text-base font-semibold text-[#fff6d1] shadow-lg transition-all hover:-translate-y-1 active:translate-y-0"
               >
+                Cek Kelayakan Sekarang
                 <svg
                   className="h-5 w-5 transition-transform group-hover:translate-x-1"
                   fill="none"
@@ -56,88 +43,112 @@ export default function GatePage() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-                Mulai Evaluasi Investasi
               </Link>
-              <p className="text-xs text-slate-500">Gratis • Tidak ada komitmen • Hasil instan</p>
-            </div>
-
-            {/* Value Props Grid */}
-            <div className="mt-12 grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
-              <article className="group relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white/60 backdrop-blur-sm transition-all hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50">
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <div className="relative p-6">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-teal-600">
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                    </svg>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-slate-900">Analisis Berbasis Lokasi</h3>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Radiasi matahari, cuaca, dan potensi energi dihitung akurat dari profil geografis kota kamu.
-                  </p>
-                </div>
-              </article>
-
-              <article className="group relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white/60 backdrop-blur-sm transition-all hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <div className="relative p-6">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M8.16 2.75a1 1 0 11-1.32 1.5l-.82-.82a.75.75 0 01.53-1.28h.81zm3.68 0a.75.75 0 01.53 1.28l-.82.82a1 1 0 11-1.32-1.5h.81zM10 3a1 1 0 011 1v5h4a2 2 0 012 2v3a2 2 0 01-2 2H5a2 2 0 01-2-2v-3a2 2 0 012-2h4V4a1 1 0 011-1z" />
-                    </svg>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-slate-900">Simulasi Finansial Terpercaya</h3>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Kapasitas sistem, biaya instalasi, penghematan tahunan, dan ROI dihitung dari parameter yang transparan.
-                  </p>
-                </div>
-              </article>
-
-              <article className="group relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white/60 backdrop-blur-sm transition-all hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                <div className="relative p-6">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600">
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                    </svg>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-slate-900">Rekomendasi Mudah Dipahami</h3>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Sistem mengubah data teknis menjadi insight &quot;Sangat Layak&quot;, &quot;Layak&quot;, atau &quot;Kurang Layak&quot; dengan penjelasan jelas.
-                  </p>
-                </div>
-              </article>
-            </div>
-
-            {/* Stats Section */}
-            <div className="mt-12 grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-xl border border-slate-200/50 bg-white/40 backdrop-blur-sm p-4 text-center">
-                <p className="text-2xl font-bold text-slate-950">8+</p>
-                <p className="mt-1 text-xs text-slate-600">Kota di Indonesia</p>
-              </div>
-              <div className="rounded-xl border border-slate-200/50 bg-white/40 backdrop-blur-sm p-4 text-center">
-                <p className="text-2xl font-bold text-slate-950">Instan</p>
-                <p className="mt-1 text-xs text-slate-600">Hasil analisis</p>
-              </div>
-              <div className="rounded-xl border border-slate-200/50 bg-white/40 backdrop-blur-sm p-4 text-center">
-                <p className="text-2xl font-bold text-slate-950">100%</p>
-                <p className="mt-1 text-xs text-slate-600">Transparan</p>
-              </div>
-              <div className="rounded-xl border border-slate-200/50 bg-white/40 backdrop-blur-sm p-4 text-center">
-                <p className="text-2xl font-bold text-slate-950">Gratis</p>
-                <p className="mt-1 text-xs text-slate-600">Tanpa biaya</p>
-              </div>
-            </div>
-
-            {/* Footer Info */}
-            <div className="mt-16 pt-8 border-t border-slate-200/50 text-center">
-              <p className="text-xs text-slate-500">
-                SolarWise v0.1 Beta • Powered by Solar Decision Engine • Data dari NASA POWER & Geocoding APIs
+              <p className="text-xs font-medium text-[#003631]/60">
+                Gratis • Tanpa komitmen • Hasil instan
               </p>
             </div>
+
+            {/* Features Grid */}
+            <div className="mt-12 grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
+              <article className="rounded-2xl border border-[#003631]/20 bg-white p-6 transition-shadow hover:shadow-md">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#003631] text-white">
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                  </svg>
+                </div>
+                <h3 className="mt-4 text-lg font-bold">Disesuaikan Lokasi</h3>
+                <p className="mt-2 text-sm text-gray-600">
+                  Data radiasi matahari real NASA untuk potensi energi spesifik di koordinatmu.
+                </p>
+              </article>
+
+              <article className="rounded-2xl border border-[#003631]/20 bg-white p-6 transition-shadow hover:shadow-md">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#003631] text-white">
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8.16 2.75a1 1 0 11-1.32 1.5l-.82-.82a.75.75 0 01.53-1.28h.81zm3.68 0a.75.75 0 01.53 1.28l-.82.82a1 1 0 11-1.32-1.5h.81zM10 3a1 1 0 011 1v5h4a2 2 0 012 2v3a2 2 0 01-2 2H5a2 2 0 01-2-2v-3a2 2 0 012-2h4V4a1 1 0 011-1z" />
+                  </svg>
+                </div>
+                <h3 className="mt-4 text-lg font-bold">Estimasi Finansial</h3>
+                <p className="mt-2 text-sm text-gray-600">
+                  Lihat biaya instalasi dan potensi penghematan bulanan secara transparan.
+                </p>
+              </article>
+
+              <article className="rounded-2xl border border-[#003631]/20 bg-white p-6 transition-shadow hover:shadow-md">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#003631] text-white">
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                  </svg>
+                </div>
+                <h3 className="mt-4 text-lg font-bold">Keputusan Jelas</h3>
+                <p className="mt-2 text-sm text-gray-600">
+                  Hasil kelayakan yang mudah dipahami untuk membantu investasi Anda.
+                </p>
+              </article>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="mt-12 grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
+                <p className="text-xl font-bold">Data Satelit</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">NASA Power</p>
+              </div>
+              <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
+                <p className="text-xl font-bold">&lt; 5 Detik</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">Analisis Cepat</p>
+              </div>
+              <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
+                <p className="text-xl font-bold">Otomatis</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">Tanpa Rumus</p>
+              </div>
+              <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
+                <p className="text-xl font-bold">100% Gratis</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">Open Access</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#003631]/10 bg-[#003631] text-[#fff6d1]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:py-14">
+          <div className="max-w-xl space-y-4">
+            <img src="/images/branding/logoTerang.png" alt="SolarWise" className="h-10 w-auto" />
+            <p className="text-sm leading-relaxed text-[#fff6d1]/80">
+              SolarWise membantu rumah tangga dan UMKM membuat keputusan investasi solar rooftop yang lebih jelas, cepat, dan berbasis data.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 text-sm sm:gap-10">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#fff6d1]/50">Jelajahi</p>
+              <div className="mt-4 space-y-3">
+                <Link href="/home" className="block hover:underline">Home</Link>
+                <Link href="/home#cek-kelayakan" className="block hover:underline">Cek Kelayakan</Link>
+                <Link href="/home#cara-kerja" className="block hover:underline">Cara Kerja</Link>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#fff6d1]/50">Fitur</p>
+              <div className="mt-4 space-y-3 text-[#fff6d1]/80">
+                <p>Data NASA Real-time</p>
+                <p>Simulasi Finansial</p>
+                <p>Analisis Kelayakan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[#052420] py-4">
+          <div className="mx-auto flex max-w-6xl flex-col justify-between px-4 text-[10px] uppercase tracking-widest text-[#fff6d1]/50 sm:px-8 sm:flex-row">
+            <p>SolarWise v0.1 Beta</p>
+            <p>© 2026 Powered by Solar Decision Engine</p>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

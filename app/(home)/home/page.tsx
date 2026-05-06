@@ -1,380 +1,298 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { useState } from "react";
 
-type Feasibility = "Sangat Layak" | "Layak" | "Kurang Layak";
+export default function HomePage() {
+  const [location, setLocation] = useState("");
+  const [monthlyBill, setMonthlyBill] = useState("");
+  const [monthlyBillRaw, setMonthlyBillRaw] = useState<number | null>(null);
+  const [monthlyKwh, setMonthlyKwh] = useState("");
+  const [monthlyKwhRaw, setMonthlyKwhRaw] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [detectingLocation, setDetectingLocation] = useState(false);
+  const [locationMessage, setLocationMessage] = useState<string | null>(null);
 
-type SimulationInput = {
-  location: string;
-  monthlyBill: number;
-};
+  const tariffOptions = [
+    { label: "R-1 (Non-Subsidi) 900 VA", range: "900 VA", rate: 1352 },
+    { label: "R-1 (Non-Subsidi) 1.300 VA – 2.200 VA", range: "1.300–2.200 VA", rate: 1444.7 },
+    { label: "R-2 3.500 VA – 5.500 VA", range: "3.500–5.500 VA", rate: 1699.53 },
+    { label: "R-3 ≥ 6.600 VA", range: ">= 6.600 VA", rate: 1699.53 },
+  ];
 
-type SimulationResult = {
-  coordinates: { lat: number; lon: number };
-  irradiance: number;
-  monthlyKwh: number;
-  annualKwh: number;
-  requiredKwP: number;
-  panelCount: number;
-  roofArea: number;
-  installationCost: number;
-  annualGeneration: number;
-  annualSavings: number;
-  roiYears: number;
-  coverage: number;
-  feasibility: Feasibility;
-  reasoning: string[];
-  insights: string[];
-};
+  const [tariffIndex, setTariffIndex] = useState(0);
+  // Use fixed rate as requested
+  const rate = 1444;
 
-const CITY_DATA: Record<string, { lat: number; lon: number; sunHours: number }> = {
-  jakarta: { lat: -6.2, lon: 106.8, sunHours: 4.75 },
-  bandung: { lat: -6.91, lon: 107.61, sunHours: 4.64 },
-  surabaya: { lat: -7.26, lon: 112.75, sunHours: 5.02 },
-  yogyakarta: { lat: -7.8, lon: 110.37, sunHours: 4.89 },
-  semarang: { lat: -6.99, lon: 110.42, sunHours: 4.86 },
-  medan: { lat: 3.59, lon: 98.67, sunHours: 4.58 },
-  makassar: { lat: -5.15, lon: 119.43, sunHours: 5.12 },
-  denpasar: { lat: -8.65, lon: 115.22, sunHours: 5.19 },
-};
-
-const IDR_FORMAT = new Intl.NumberFormat("id-ID", {
-  style: "currency",
-  currency: "IDR",
-  maximumFractionDigits: 0,
-});
-
-function toSentenceCase(input: string): string {
-  if (!input.trim()) {
-    return "Lokasi tidak diketahui";
-  }
-
-  return input
-    .trim()
-    .split(" ")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-    .join(" ");
-}
-
-function estimateSolarOutcome(input: SimulationInput): SimulationResult {
-  const normalized = input.location.trim().toLowerCase();
-  const cityProfile = CITY_DATA[normalized] ?? {
-    lat: -2.5,
-    lon: 118,
-    sunHours: 4.82,
-  };
-
-  const tariff = 1650;
-  const performanceRatio = 0.78;
-  const exportEfficiency = 0.9;
-  const panelWatt = 550;
-  const panelArea = 2.1;
-  const capexPerKwP = 14_500_000;
-
-  const monthlyKwh = input.monthlyBill / tariff;
-  const annualKwh = monthlyKwh * 12;
-  const requiredKwP = annualKwh / (cityProfile.sunHours * 365 * performanceRatio);
-  const panelCount = Math.max(1, Math.ceil((requiredKwP * 1000) / panelWatt));
-  const roofArea = panelCount * panelArea;
-
-  const annualGeneration = requiredKwP * cityProfile.sunHours * 365 * performanceRatio;
-  const annualSavings = Math.min(annualGeneration, annualKwh) * tariff * exportEfficiency;
-  const installationCost = requiredKwP * capexPerKwP;
-  const roiYears = installationCost / annualSavings;
-  const coverage = Math.min(100, (annualGeneration / annualKwh) * 100);
-
-  const reasoning: string[] = [];
-  const insights: string[] = [];
-
-  if (roiYears <= 6) {
-    reasoning.push("Waktu pengembalian investasi sangat kompetitif untuk proyek rooftop.");
-  } else if (roiYears <= 9) {
-    reasoning.push("ROI masih berada dalam rentang layak untuk aset energi jangka menengah.");
-  } else {
-    reasoning.push("ROI relatif panjang, perlu optimasi desain atau skema pembiayaan.");
-  }
-
-  if (coverage >= 85) {
-    reasoning.push("Kapasitas sistem mampu menutup sebagian besar kebutuhan listrik tahunan.");
-  } else {
-    reasoning.push("Kebutuhan energi tinggi membuat coverage belum optimal dengan konfigurasi awal.");
-  }
-
-  if (roofArea > 120) {
-    insights.push("Kebutuhan luas atap cukup besar. Pertimbangkan pembagian fase instalasi.");
-  }
-
-  if (panelCount > 40) {
-    insights.push("Jumlah panel tinggi untuk skala rumah tangga. Verifikasi struktur atap diperlukan.");
-  }
-
-  if (roiYears > 8) {
-    insights.push("Pertimbangkan opsi pembiayaan hijau untuk menurunkan beban investasi awal.");
-  }
-
-  if (normalized in CITY_DATA) {
-    insights.push("Profil radiasi diambil dari baseline kota yang kamu pilih dan cocok untuk estimasi awal.");
-  } else {
-    insights.push("Lokasi belum ada di baseline kota. Sistem menggunakan rata-rata nasional sebagai pendekatan.");
-  }
-
-  let feasibility: Feasibility;
-  if (roiYears <= 6 && roofArea <= 120) {
-    feasibility = "Sangat Layak";
-  } else if (roiYears <= 9) {
-    feasibility = "Layak";
-  } else {
-    feasibility = "Kurang Layak";
-  }
-
-  return {
-    coordinates: {
-      lat: cityProfile.lat,
-      lon: cityProfile.lon,
-    },
-    irradiance: cityProfile.sunHours,
-    monthlyKwh,
-    annualKwh,
-    requiredKwP,
-    panelCount,
-    roofArea,
-    installationCost,
-    annualGeneration,
-    annualSavings,
-    roiYears,
-    coverage,
-    feasibility,
-    reasoning,
-    insights,
-  };
-}
-
-function metricNumber(value: number, digits = 1): string {
-  return Number.isFinite(value) ? value.toFixed(digits) : "0";
-}
-
-export default function SolarwisePrototype() {
-  const [location, setLocation] = useState("Bandung");
-  const [monthlyBill, setMonthlyBill] = useState("1200000");
-  const [phase, setPhase] = useState<"input" | "analysis" | "result">("input");
-  const [result, setResult] = useState<SimulationResult | null>(null);
-
-  const progressLabel = useMemo(() => {
-    if (phase === "input") {
-      return "Input Profil";
-    }
-
-    if (phase === "analysis") {
-      return "Analisis Lokasi & Finansial";
-    }
-
-    return "Dashboard Keputusan";
-  }, [phase]);
-
-  const submitSimulation = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const safeBill = Number(monthlyBill.replace(/[^\d]/g, ""));
-    if (!location.trim() || !safeBill || safeBill < 250000) {
+  const useCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationMessage("Browser ini belum mendukung lokasi otomatis.");
       return;
     }
 
-    setPhase("analysis");
+    setDetectingLocation(true);
+    setLocationMessage(null);
 
-    window.setTimeout(() => {
-      const simulation = estimateSolarOutcome({
-        location,
-        monthlyBill: safeBill,
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        const fallbackLabel = `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`;
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`,
+          );
+
+          if (!response.ok) {
+            throw new Error("Reverse geocoding failed");
+          }
+
+          const data = (await response.json()) as { display_name?: string };
+          setLocation(data.display_name ?? fallbackLabel);
+          setLocationMessage("Lokasi saat ini berhasil dipakai.");
+        } catch {
+          setLocation(fallbackLabel);
+          setLocationMessage("Lokasi ditemukan, tapi nama area tidak bisa dimuat.");
+        } finally {
+          setDetectingLocation(false);
+        }
+      },
+      () => {
+        setDetectingLocation(false);
+        setLocationMessage("Izin lokasi ditolak atau tidak tersedia.");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      },
+    );
+  };
+
+  const formatCurrency = (value: number) => {
+    try {
+      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
+    } catch {
+      return `Rp ${value.toLocaleString('id-ID')}`;
+    }
+  };
+
+  const handleMonthlyBillChange = (val: string) => {
+    const digits = val.replace(/\D/g, "");
+    const num = digits ? parseInt(digits, 10) : 0;
+    setMonthlyBillRaw(num || null);
+    setMonthlyBill(num ? formatCurrency(num) : "");
+
+    if (num && rate) {
+      const kwh = Math.round((num / rate) * 100) / 100;
+      setMonthlyKwhRaw(kwh || null);
+      setMonthlyKwh(kwh ? kwh.toLocaleString("id-ID", { maximumFractionDigits: 2 }) : "");
+    } else {
+      setMonthlyKwhRaw(null);
+      setMonthlyKwh("");
+    }
+  };
+
+  const handleMonthlyKwhChange = (val: string) => {
+    // Accept comma or dot as decimal
+    const cleaned = val.replace(/,/g, '.').replace(/[^0-9.]/g, '');
+    const num = cleaned ? parseFloat(cleaned) : 0;
+    setMonthlyKwhRaw(num || null);
+    setMonthlyKwh(num ? num.toLocaleString('id-ID', { maximumFractionDigits: 2 }) : '');
+
+    if (num && rate) {
+      const bill = Math.round(num * rate);
+      setMonthlyBillRaw(bill || null);
+      setMonthlyBill(bill ? formatCurrency(bill) : '');
+    } else {
+      setMonthlyBillRaw(null);
+      setMonthlyBill('');
+    }
+  };
+
+  // tariff slider removed per request; rate is fixed to 1444
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Use parsed billing amount from state
+      const billingAmount = monthlyBillRaw ?? parseInt(monthlyBill.replace(/\D/g, ""));
+
+      if (!location || !billingAmount) {
+        setLocationMessage("Pastikan lokasi dan tagihan listrik terisi dengan benar");
+        setLoading(false);
+        return;
+      }
+
+      // Redirect to result page with query parameters
+      const params = new URLSearchParams({
+        lokasi: location,
+        tagihan: billingAmount.toString(),
+        tarif: rate.toString(),
+        kwh: (monthlyKwhRaw ?? '').toString(),
       });
-      setResult(simulation);
-      setPhase("result");
-    }, 1400);
+
+      window.location.href = `/result?${params.toString()}`;
+    } catch (error) {
+      setLocationMessage("Terjadi kesalahan saat memproses data");
+      setLoading(false);
+    }
   };
 
   return (
-    <main className="relative overflow-hidden px-4 py-8 sm:px-8 lg:px-14">
-      <div className="hero-glow hero-glow-left" aria-hidden />
-      <div className="hero-glow hero-glow-right" aria-hidden />
+    <main className="min-h-screen bg-[#fff6d1] flex flex-col items-center justify-center px-4 py-12 text-[#003631] transition-colors duration-500 sm:px-8">
+      <div className="w-full max-w-2xl">
+        <div className="mb-8 flex justify-center">
+          <img src="/images/branding/logoGelap.png" alt="SolarWise" className="h-14 w-auto sm:h-16" />
+        </div>
 
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <header className="grid gap-5 rounded-3xl border border-white/50 bg-white/70 p-6 shadow-[0_20px_80px_-30px_rgba(0,56,89,0.35)] backdrop-blur-md sm:p-8">
-          <p className="inline-flex w-fit items-center rounded-full border border-slate-300 bg-slate-900 px-3 py-1 text-xs tracking-[0.16em] text-slate-100 uppercase">
-            SolarWise Decision Engine
-          </p>
-          <h1 className="max-w-3xl text-balance text-3xl font-semibold leading-tight text-slate-950 sm:text-5xl">
-            Dari tagihan listrik ke keputusan investasi solar rooftop yang jelas.
-          </h1>
-          <p className="max-w-3xl text-base leading-relaxed text-slate-700 sm:text-lg">
-            Prototipe ini memadukan analisis lokasi, simulasi finansial, dan reasoning agar pengguna rumah tangga
-            maupun UMKM bisa menilai kelayakan investasi dengan percaya diri.
-          </p>
-          <div className="grid gap-3 text-sm text-slate-700 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white/75 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Tahap Aktif</p>
-              <p className="mt-1 text-base font-semibold text-slate-900">{progressLabel}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/75 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Alur</p>
-              <p className="mt-1 text-base font-semibold text-slate-900">Input → Analisis → Rekomendasi</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/75 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Target Pengguna</p>
-              <p className="mt-1 text-base font-semibold text-slate-900">Rumah Tangga & UMKM</p>
-            </div>
-          </div>
-        </header>
-              
-        <section className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <form
-            onSubmit={submitSimulation}
-            className="grid gap-6 rounded-3xl border border-[#D6E6E9] bg-[#F4FAFB] p-6 shadow-[0_22px_60px_-40px_rgba(0,56,89,0.65)] sm:p-8"
-          >
-            <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-slate-950 sm:text-2xl">1. Input Data Awal</h2>
-              <p className="text-sm leading-relaxed text-slate-700">
-                Masukkan kota atau alamat singkat, lalu total tagihan listrik bulanan. Sistem akan menerjemahkan input
-                ini menjadi estimasi kebutuhan sistem dan output finansial.
-              </p>
-            </div>
-            
+        <p className="mb-10 text-center text-base font-medium sm:text-lg">
+          Ketahui kelayakan solar panel untuk rumahmu dalam hitungan menit
+        </p>
 
-            <label className="grid gap-2 text-sm text-slate-800">
-              Lokasi (kota atau alamat)
-              <input
-                type="text"
-                value={location}
-                onChange={(event) => setLocation(event.target.value)}
-                className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
-                placeholder="Contoh: Bandung"
-                required
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm text-slate-800">
-              Tagihan listrik bulanan (IDR)
-              <input
-                type="text"
-                inputMode="numeric"
-                value={monthlyBill}
-                onChange={(event) => setMonthlyBill(event.target.value)}
-                className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
-                placeholder="Contoh: 1200000"
-                required
-              />
-            </label>
-
-            <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
-              Minimum simulasi disarankan untuk tagihan mulai IDR 250.000 agar sizing sistem lebih representatif.
-            </p>
-
-            <button
-              type="submit"
-              className="h-12 rounded-xl bg-slate-950 text-sm font-semibold tracking-wide text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-              disabled={phase === "analysis"}
-            >
-              {phase === "analysis" ? "Menganalisis Data..." : "Jalankan Analisis SolarWise"}
-            </button>
-          </form>
-
-          <div className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-slate-950 sm:text-2xl">2. Proses Analisis</h2>
-            <ol className="grid gap-3 text-sm text-slate-700">
-              <li className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                Geocoding lokasi untuk mendapatkan koordinat.
-              </li>
-              <li className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                Pengambilan baseline irradiance sebagai representasi data NASA POWER.
-              </li>
-              <li className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                Perhitungan kebutuhan kapasitas, biaya instalasi, dan potensi penghematan.
-              </li>
-              <li className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                Decision engine mengeluarkan status kelayakan + reasoning.
-              </li>
-            </ol>
-
-            {phase === "analysis" ? (
-              <div className="rounded-2xl border border-teal-300 bg-teal-50 p-4 text-sm text-teal-900">
-                <div className="solarwise-loader mb-3" aria-hidden />
-                Sistem sedang mensimulasikan potensi energi surya berbasis lokasi dan profil konsumsi.
-              </div>
-            ) : (
-              <p className="rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
-                Jalankan analisis untuk melihat dashboard keputusan otomatis.
-              </p>
-            )}
-          </div>
-        </section>
-
-        {result ? (
-          <section className="grid gap-6 rounded-3xl border border-[#BFDDE2] bg-white p-6 shadow-[0_20px_60px_-35px_rgba(0,56,89,0.55)] sm:p-8">
-            <div className="flex flex-col items-start justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-center">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="rounded-4xl border border-[#003631] bg-[#003631] p-5 text-[#fff6d1] shadow-[0_18px_50px_rgba(6,46,42,0.22)] transition-colors duration-500 sm:p-8">
+            <div className="mb-6 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">3. Dashboard Keputusan</p>
-                <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">
-                  Status: <span className="text-teal-700">{result.feasibility}</span>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#fff6d1]">
+                  Input Data
+                </p>
+                <h2 className="mt-2 text-xl font-bold sm:text-2xl">
+                  Isi data rumahmu di sini
                 </h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  Lokasi: {toSentenceCase(location)} ({metricNumber(result.coordinates.lat, 2)}, {metricNumber(result.coordinates.lon, 2)})
+              </div>
+              <div className="hidden h-12 w-12 items-center justify-center rounded-2xl bg-[#fff6d1] text-[#003631] sm:flex">
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M3 11.25 12 4l9 7.25V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.75Z" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <label className="block text-sm font-semibold">
+                  Di mana lokasi rumah atau usahamu?
+                </label>
+
+                <button
+                  type="button"
+                  onClick={useCurrentLocation}
+                  disabled={detectingLocation}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#fff6d1] bg-[#fff6d1] px-4 py-2 text-xs font-semibold text-[#003631] transition-colors duration-500 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 2v3m0 14v3m10-10h-3M5 12H2m15.5-7.5-2.1 2.1M8.6 15.4l-2.1 2.1m0-10 2.1 2.1m8.9 8.9 2.1 2.1"
+                    />
+                    <circle cx="12" cy="12" r="3" strokeWidth={2} />
+                  </svg>
+                  {detectingLocation ? "Mendeteksi lokasi..." : "Gunakan lokasi saat ini"}
+                </button>
+              </div>
+
+              <div className="rounded-3xl border border-[#fff6d1] bg-[#fff6d1] px-4 py-3 shadow-sm transition-all duration-500 focus-within:border-[#fff6d1] focus-within:ring-4 focus-within:ring-[#fff6d1] focus-within:shadow-[0_0_0_1px_rgba(255,246,209,1),0_16px_34px_rgba(0,54,49,0.24)]">
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="jalan keputih, d29"
+                  className="w-full bg-transparent text-[#003631] caret-[#003631] placeholder-[#003631]/60 outline-none"
+                  required
+                />
+              </div>
+
+              <div className="flex items-start gap-2 text-xs text-[#fff6d1]">
+                <span className="mt-0.5">•</span>
+                <p>
+                  Kamu bisa mengetik manual atau memakai lokasi saat ini untuk isi otomatis.
                 </p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                Irradiance Estimasi: <strong>{metricNumber(result.irradiance, 2)} kWh/m2/hari</strong>
+            </div>
+
+            <div className="mt-6 space-y-2">
+              <label className="block text-sm font-semibold">
+                Rata - rata tagihan listrik perbulan
+              </label>
+              <div className="rounded-full border border-[#fff6d1]/15 bg-[#fff6d1] px-4 py-3 shadow-sm transition-all duration-500 focus-within:border-[#fff6d1] focus-within:ring-4 focus-within:ring-[#fff6d1]/20 focus-within:shadow-[0_0_0_1px_rgba(255,246,209,0.45),0_16px_34px_rgba(6,46,42,0.18)]">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={monthlyBill}
+                    onChange={(e) => handleMonthlyBillChange(e.target.value)}
+                    placeholder="Rp 500.000"
+                    className="flex-1 bg-transparent text-[#003631] caret-[#003631] placeholder-[#003631]/60 outline-none"
+                    inputMode="numeric"
+                    required
+                  />
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={monthlyKwh}
+                      onChange={(e) => handleMonthlyKwhChange(e.target.value)}
+                      placeholder="kWh"
+                      className="w-28 rounded-full border border-[#003631]/10 bg-white/10 px-3 py-1 text-sm text-[#003631] outline-none"
+                      inputMode="decimal"
+                    />
+                    <span className="text-xs text-[#003631]/70">kWh</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3">
+                <div className="text-sm text-[#fff6d1]/90">Tarif yang digunakan: <span className="font-semibold">{formatCurrency(rate)}/kWh</span></div>
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <article className="metric-card">
-                <p>Konsumsi Bulanan</p>
-                <h3>{metricNumber(result.monthlyKwh, 0)} kWh</h3>
-              </article>
-              <article className="metric-card">
-                <p>Kapasitas Sistem</p>
-                <h3>{metricNumber(result.requiredKwP, 2)} kWp</h3>
-              </article>
-              <article className="metric-card">
-                <p>Biaya Instalasi</p>
-                <h3>{IDR_FORMAT.format(result.installationCost)}</h3>
-              </article>
-              <article className="metric-card">
-                <p>Estimasi ROI</p>
-                <h3>{metricNumber(result.roiYears, 1)} tahun</h3>
-              </article>
+            <div className="flex justify-center pt-6">
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex min-w-44 items-center justify-center rounded-full bg-[#fff6d1] px-8 py-3 font-semibold text-[#003631] transition-colors duration-500 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? "Menganalisis..." : "Cek Kelayakan"}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {locationMessage ? (
+        <div className="fixed bottom-4 left-4 z-50 w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-[#003631]/20 bg-[#fff6d1] px-4 py-3 text-[#003631] shadow-[0_12px_30px_rgba(6,46,42,0.18)] transition-colors duration-500">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#003631]/10 text-[#003631]">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z" />
+              </svg>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
-              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                <h3 className="text-base font-semibold text-slate-900">Rekomendasi Sistem</h3>
-                <ul className="mt-3 grid gap-2 text-sm text-slate-700">
-                  <li>Jumlah panel estimasi: {result.panelCount} panel (@550Wp)</li>
-                  <li>Kebutuhan area atap: {metricNumber(result.roofArea, 1)} m2</li>
-                  <li>Produksi energi tahunan: {metricNumber(result.annualGeneration, 0)} kWh</li>
-                  <li>Cakupan kebutuhan listrik: {metricNumber(result.coverage, 1)}%</li>
-                  <li>Potensi penghematan tahunan: {IDR_FORMAT.format(result.annualSavings)}</li>
-                </ul>
-              </article>
-
-              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                <h3 className="text-base font-semibold text-slate-900">Reasoning Decision Engine</h3>
-                <ul className="mt-3 grid gap-2 text-sm text-slate-700">
-                  {result.reasoning.map((reason) => (
-                    <li key={reason}>{reason}</li>
-                  ))}
-                </ul>
-              </article>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">Lokasi diperbarui</p>
+              <p className="mt-0.5 text-sm text-[#003631]/70">{locationMessage}</p>
             </div>
 
-            <article className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-              <h3 className="text-base font-semibold text-amber-900">Insight Tambahan</h3>
-              <ul className="mt-3 grid gap-2 text-sm text-amber-950">
-                {result.insights.map((insight) => (
-                  <li key={insight}>{insight}</li>
-                ))}
-              </ul>
-            </article>
-          </section>
-        ) : null}
-      </section>
+            <button
+              type="button"
+              onClick={() => setLocationMessage(null)}
+              className="rounded-full p-1 text-[#003631]/60 transition hover:bg-[#003631]/10 hover:text-[#003631]"
+              aria-label="Tutup pesan lokasi"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
+
