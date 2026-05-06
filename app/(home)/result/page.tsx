@@ -352,7 +352,7 @@ function ROIChart({ data }: { data: Array<{ year: number; cumulative_profit: num
   );
 }
 
-export default function ResultPage() {
+function ResultContent() {
   const searchParams = useSearchParams();
   const [data, setData] = useState<SimulationResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -925,3 +925,21 @@ ${error.details ? `Details: ${error.details}` : ""}`}
     </main>
   );
 }
+
+export default function ResultPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center p-4 bg-[#F7F9F2]">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#003631] border-t-transparent"></div>
+            <p className="mt-4 font-medium text-[#003631]">Memuat hasil simulasi...</p>
+          </div>
+        </div>
+      }
+    >
+      <ResultContent />
+    </Suspense>
+  );
+}
+

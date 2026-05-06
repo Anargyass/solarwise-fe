@@ -58,7 +58,7 @@ interface UserSimulationData {
   roi: string;
 }
 
-export default function VendorPage() {
+function VendorContent() {
   const searchParams = useSearchParams();
 
   // Parse user data from URL
@@ -391,5 +391,24 @@ export default function VendorPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+import { Suspense } from "react";
+
+export default function VendorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center p-4 bg-[#F7F9F2]">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#003631] border-t-transparent"></div>
+            <p className="mt-4 font-medium text-[#003631]">Memuat data vendor...</p>
+          </div>
+        </div>
+      }
+    >
+      <VendorContent />
+    </Suspense>
   );
 }
