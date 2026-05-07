@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -51,7 +52,7 @@ const MOCK_VENDORS = [
   },
 ];
 
-const VALUE_PILLARS: { title: string; description: string; icon: JSX.Element }[] = [
+const VALUE_PILLARS: { title: string; description: string; icon: ReactNode }[] = [
   {
     title: "Profil kebutuhan akurat",
     description: "Rekomendasi berbasis kapasitas, lokasi, dan konsumsi energi.",
