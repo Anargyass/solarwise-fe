@@ -29,8 +29,6 @@ const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
   yogyakarta: { lat: -7.7956, lng: 110.3695 },
 };
 
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://4.230.11.239:8080").replace(/\/$/, "");
-
 interface SimulationResponse {
   status: "Layak" | "Sangat Layak" | "Tidak Layak";
   reasoning: string;

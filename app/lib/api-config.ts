@@ -6,7 +6,7 @@
 export const apiConfig = {
   // Backend API
   simulation: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080",
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || "",
     endpoints: {
       simulate: "/api/v1/simulation",
     },
