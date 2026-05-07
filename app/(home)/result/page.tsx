@@ -518,7 +518,7 @@ function ResultContent() {
                 throw createAppError(
                   "NETWORK",
                   "Koneksi ke server gagal",
-                  `Pastikan server berjalan di ${API_BASE_URL}`,
+                  `Pastikan server berjalan di ${apiConfig.simulation.baseUrl}`,
                   true
                 );
               }
