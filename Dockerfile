@@ -2,24 +2,26 @@ FROM node:20-alpine AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install pnpm
+# Install pnpm versi 9
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 
-# Step 1: Copy SEMUA file konfigurasi pnpm & workspace
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
-
-# Step 2: Karena ini workspace, kita perlu copy folder app-nya juga agar pnpm tahu apa yang mau diinstall
+# Step 1: Copy semua file dulu
 COPY . .
 
-# Step 3: Install dependencies
-RUN pnpm install --frozen-lockfile
+# Step 2: HAPUS file workspace agar pnpm tidak menganggap ini monorepo
+# Ini kunci untuk mengatasi error "packages field missing"
+RUN rm -f pnpm-workspace.yaml
 
-# Step 4: Build
+# Step 3: Install dependencies tanpa flag --frozen-lockfile dulu 
+# agar pnpm bisa menyesuaikan diri dengan absennya workspace
+RUN pnpm install
+
+# Step 4: Build aplikasi
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN pnpm build
 
-# Step 5: Runner
+# Step 5: Runner (Stage Akhir)
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -28,6 +30,7 @@ ENV HOSTNAME=0.0.0.0
 
 RUN addgroup -S nodejs -g 1001 && adduser -S nextjs -u 1001 -G nodejs
 
+# Ambil hasil build dari stage 'base'
 COPY --from=base /app/public ./public
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
