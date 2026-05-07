@@ -239,11 +239,10 @@ export default function HomePage() {
                       type="text"
                       value={monthlyKwh}
                       onChange={(e) => handleMonthlyKwhChange(e.target.value)}
-                      placeholder="kWh"
+                      placeholder="3300 kwh"
                       className="w-28 rounded-full border border-[#003631]/10 bg-white/10 px-3 py-1 text-sm text-[#003631] outline-none"
                       inputMode="decimal"
                     />
-                    <span className="text-xs text-[#003631]/70">kWh</span>
                   </div>
                 </div>
               </div>
