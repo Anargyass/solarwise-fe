@@ -176,10 +176,10 @@ function VendorContent() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-balance text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+              <h1 className="text-balance text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
                 Vendor terbaik untuk sistem surya Anda
               </h1>
-              <p className="text-balance text-xs leading-relaxed text-[#003631]/75 sm:text-sm">
+              <p className="text-balance text-[11px] leading-relaxed text-[#003631]/75 sm:text-xs">
                 Rekomendasi dibuat dari simulasi energi dan lokasi Anda. Fokus pada opsi yang paling relevan.
               </p>
             </div>
@@ -264,71 +264,71 @@ function VendorContent() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-xl font-bold sm:text-2xl">Vendor rekomendasi untuk Anda</h2>
-              <p className="mt-2 text-xs text-[#003631]/70">
+              <h2 className="text-lg font-bold sm:text-xl">Vendor rekomendasi untuk Anda</h2>
+              <p className="mt-2 text-[11px] text-[#003631]/70">
                 Dipilih dari profil, lokasi, dan kapasitas sistem Anda.
               </p>
             </div>
-            <div className="rounded-2xl border border-[#003631]/15 bg-white px-4 py-3 text-[10px] font-semibold uppercase text-[#003631]/70 shadow-sm">
+            <div className="rounded-2xl border border-[#003631]/15 bg-white px-3 py-2.5 text-[9px] font-semibold uppercase text-[#003631]/70 shadow-sm">
               {matchedVendors.length} vendor terbaik dari {MOCK_VENDORS.length} kandidat
             </div>
           </div>
 
-          <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          <div className="mt-6 grid gap-5 lg:grid-cols-3">
             {matchedVendors.map((vendor) => (
               <article
                 key={vendor.id}
                 className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#003631]/15 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="absolute left-0 top-0 h-1 w-full bg-[#003631]/20" />
-                <div className="p-6">
-                  <div className="flex items-start justify-between gap-4">
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-sm font-bold text-[#003631]">{vendor.name}</h3>
-                      <div className="mt-2 flex items-center gap-2 text-[11px] text-[#003631]/70">
-                        <svg className="h-3.5 w-3.5 text-[#003631]/60" fill="currentColor" viewBox="0 0 20 20">
+                      <h3 className="text-[15px] font-bold leading-snug text-[#003631]">{vendor.name}</h3>
+                      <div className="mt-1.5 flex items-center gap-2 text-[10px] text-[#003631]/70">
+                        <svg className="h-3 w-3 text-[#003631]/60" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                         </svg>
                         {vendor.city}
                       </div>
                     </div>
-                    <div className="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-semibold text-emerald-700">
+                    <div className="rounded-full bg-emerald-50 px-2.5 py-1 text-[9px] font-semibold text-emerald-700">
                       Match {vendor.matchScore}%
                     </div>
                   </div>
 
-                  <p className="mt-4 rounded-2xl bg-blue-50 px-4 py-3 text-[11px] leading-relaxed text-blue-900">
+                  <p className="mt-3 rounded-2xl bg-blue-50 px-3.5 py-2.5 text-[10px] leading-relaxed text-blue-900">
                     {vendor.matchReason}
                   </p>
 
-                  <div className="mt-5 grid grid-cols-3 gap-3 text-center">
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3">
+                  <div className="mt-4 grid grid-cols-3 gap-2.5 text-center">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2.5">
                       <p className="text-[9px] font-semibold uppercase text-[#003631]/60">Harga/kWp</p>
-                      <p className="mt-2 text-[11px] font-bold text-[#003631]">{formatCurrency(vendor.pricePerKwp)}</p>
+                      <p className="mt-1.5 text-[10px] font-bold leading-snug text-[#003631]">{formatCurrency(vendor.pricePerKwp)}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2.5">
                       <p className="text-[9px] font-semibold uppercase text-[#003631]/60">Pengalaman</p>
-                      <p className="mt-2 text-[11px] font-bold text-[#003631]">{vendor.experience}</p>
+                      <p className="mt-1.5 text-[10px] font-bold leading-snug text-[#003631]">{vendor.experience}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2.5">
                       <p className="text-[9px] font-semibold uppercase text-[#003631]/60">Proyek</p>
-                      <p className="mt-2 text-[11px] font-bold text-[#003631]">{vendor.projects}+</p>
+                      <p className="mt-1.5 text-[10px] font-bold leading-snug text-[#003631]">{vendor.projects}+</p>
                     </div>
                   </div>
 
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-1.5">
                     {vendor.projectTypes.map((type) => (
-                      <span key={type} className="rounded-full bg-[#003631]/10 px-3 py-1 text-[10px] font-semibold text-[#003631]">
+                      <span key={type} className="rounded-full bg-[#003631]/10 px-2.5 py-1 text-[9px] font-semibold text-[#003631]">
                         {type}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-6 flex flex-col gap-2">
-                    <button className="w-full rounded-xl bg-[#003631] px-4 py-2.5 text-xs font-semibold text-[#fff6d1] transition-all hover:opacity-90">
+                  <div className="mt-5 flex flex-col gap-2">
+                    <button className="w-full rounded-xl bg-[#003631] px-4 py-2 text-[11px] font-semibold text-[#fff6d1] transition-all hover:opacity-90">
                       Hubungi Vendor
                     </button>
-                    <button className="w-full rounded-xl border-2 border-[#003631] px-4 py-2.5 text-xs font-semibold text-[#003631] transition-all hover:bg-[#003631]/5">
+                    <button className="w-full rounded-xl border-2 border-[#003631] px-4 py-2 text-[11px] font-semibold text-[#003631] transition-all hover:bg-[#003631]/5">
                       Lihat Detail
                     </button>
                   </div>
@@ -337,7 +337,7 @@ function VendorContent() {
             ))}
           </div>
 
-          <div className="mt-8 rounded-2xl border border-[#003631]/15 bg-white p-6 text-[11px] text-[#003631]/80 shadow-sm">
+          <div className="mt-6 rounded-2xl border border-[#003631]/15 bg-white p-4 text-[10px] text-[#003631]/80 shadow-sm">
             Tip: Vendor di atas paling cocok untuk kapasitas {userData.kapasitas} kWp di area {userData.lokasi}. Anda bebas membandingkan atau konsultasi dengan tim support kami.
           </div>
         </div>
