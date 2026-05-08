@@ -317,7 +317,7 @@ function ROIChart({ data }: { data: Array<{ year: number; cumulative_profit: num
           ))}
 
         {/* Y-axis labels */}
-        {yAxisValues.map((value, i) => {
+          {yAxisValues.map((value, i) => {
           const y = topPadding + (usableHeight / yAxisSteps) * (yAxisSteps - i);
           return (
             <text
@@ -331,7 +331,7 @@ function ROIChart({ data }: { data: Array<{ year: number; cumulative_profit: num
               fontWeight="500"
             >
               {value >= 0 ? "+" : ""}
-              {(value / 1000000).toFixed(0)}M
+              {Number((value / 1000000).toFixed(0)).toLocaleString("id-ID")}M
             </text>
           );
         })}
@@ -662,7 +662,7 @@ ${error.details ? `Details: ${error.details}` : ""}`}
     <main className="min-h-screen bg-[#fff6d1] px-4 pt-0 pb-8 text-[#003631] transition-colors duration-500 sm:px-8 lg:px-16 sm:pt-0 lg:pt-0">
         {/* Map Section */}
         {coordinates && (
-          <div className="relative z-0 -mt-24 mb-4 -mx-4 overflow-hidden border-y border-[#003631]/20 shadow-lg sm:-mt-28 sm:-mx-8 lg:-mt-32 lg:-mx-16 lg:rounded-none lg:border-x-0">
+          <div className="relative z-0 -mt-24 mb-4 -mx-4 overflow-hidden border-y border-[#003631]/20 sm:-mt-28 sm:-mx-8 lg:-mt-32 lg:-mx-16 lg:rounded-none lg:border-x-0">
             <ResultMap coordinates={coordinates} locationName={locationName} />
           </div>
         )}
@@ -699,22 +699,22 @@ ${error.details ? `Details: ${error.details}` : ""}`}
           </div>
 
           {/* Quick Stats */}
-          <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/80 p-4 shadow-md transition-shadow hover:shadow-lg">
+            <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/80 p-4">
               <p className="text-xs font-semibold text-[#fff6d1] uppercase">Investasi Total</p>
-              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{data.display.total_investment}</p>
+              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{formatCurrency(data.financials.total_investment)}</p>
             </div>
-            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/75 p-4 shadow-md transition-shadow hover:shadow-lg">
+            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/75 p-4">
               <p className="text-xs font-semibold text-[#fff6d1] uppercase">Penghematan/Bulan</p>
-              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{data.display.monthly_savings}</p>
+              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{formatCurrency(data.financials.monthly_savings)}</p>
             </div>
-            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/70 p-4 shadow-md transition-shadow hover:shadow-lg">
+            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/70 p-4">
               <p className="text-xs font-semibold text-[#fff6d1] uppercase">Payback Period</p>
               <p className="mt-2 text-xl font-bold text-[#fff6d1]">{data.display.payback_period}</p>
             </div>
-            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/65 p-4 shadow-md transition-shadow hover:shadow-lg">
+            <div className="rounded-2xl border-2 border-[#003631] bg-linear-to-br from-[#003631] to-[#003631]/65 p-4">
               <p className="text-xs font-semibold text-[#fff6d1] uppercase">Kapasitas Sistem</p>
-              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{data.display.system_capacity_kwp}</p>
+              <p className="mt-2 text-xl font-bold text-[#fff6d1]">{Number(data.technical_recommendation.system_capacity_kwp).toLocaleString("id-ID", { maximumFractionDigits: 2 })} kWp</p>
             </div>
           </div>
 
@@ -846,19 +846,19 @@ ${error.details ? `Details: ${error.details}` : ""}`}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <div className="rounded-2xl border-2 border-[#003631] bg-[#fff6d1] p-6 text-center text-[#003631]">
                   <p className="text-sm font-semibold text-[#003631]/70 uppercase">Jumlah Panel</p>
-                  <p className="mt-3 text-4xl font-bold text-[#003631]">{data.technical_recommendation.panel_count}</p>
+                  <p className="mt-3 text-4xl font-bold text-[#003631]">{Number(data.technical_recommendation.panel_count).toLocaleString("id-ID")}</p>
                   <p className="mt-2 text-xs text-[#003631]/60">Unit panel surya</p>
                 </div>
 
                 <div className="rounded-2xl border-2 border-[#003631] bg-[#fff6d1] p-6 text-center text-[#003631]">
                   <p className="text-sm font-semibold text-[#003631]/70 uppercase">Kapasitas Sistem</p>
-                  <p className="mt-3 text-4xl font-bold text-[#003631]">{data.technical_recommendation.system_capacity_kwp}</p>
+                  <p className="mt-3 text-4xl font-bold text-[#003631]">{Number(data.technical_recommendation.system_capacity_kwp).toLocaleString("id-ID", { maximumFractionDigits: 2 })} kWp</p>
                   <p className="mt-2 text-xs text-[#003631]/60">kWp (kilowatt peak)</p>
                 </div>
 
                 <div className="rounded-2xl border-2 border-[#003631] bg-[#fff6d1] p-6 text-center text-[#003631]">
                   <p className="text-sm font-semibold text-[#003631]/70 uppercase">Area Atap yang Dibutuhkan</p>
-                  <p className="mt-3 text-4xl font-bold text-[#003631]">{data.technical_recommendation.required_area_m2}</p>
+                  <p className="mt-3 text-4xl font-bold text-[#003631]">{Number(data.technical_recommendation.required_area_m2).toLocaleString("id-ID")}</p>
                   <p className="mt-2 text-xs text-[#003631]/60">meter persegi</p>
                 </div>
               </div>
@@ -871,7 +871,7 @@ ${error.details ? `Details: ${error.details}` : ""}`}
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-[#003631]">Jumlah Panel: {data.technical_recommendation.panel_count} unit</p>
+                      <p className="font-semibold text-[#003631]">Jumlah Panel: {Number(data.technical_recommendation.panel_count).toLocaleString("id-ID")} unit</p>
                       <p className="mt-1 text-[#003631]/70">Setiap panel dirancang optimal untuk kondisi iklim Indonesia</p>
                     </div>
                   </div>
@@ -880,7 +880,7 @@ ${error.details ? `Details: ${error.details}` : ""}`}
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-[#003631]">Area Atap: {data.technical_recommendation.required_area_m2} m²</p>
+                      <p className="font-semibold text-[#003631]">Area Atap: {Number(data.technical_recommendation.required_area_m2).toLocaleString("id-ID")} m²</p>
                       <p className="mt-1 text-[#003631]/70">Memastikan sistem pas dengan luas atap khas rumah Indonesia (30-40 m²)</p>
                     </div>
                   </div>
