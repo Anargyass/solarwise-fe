@@ -204,7 +204,7 @@ export default function HomePage() {
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="jalan keputih, d29"
+                  placeholder="jalan keputih, surabaya"
                   className="w-full bg-transparent text-[#003631] caret-[#003631] placeholder-[#003631]/60 outline-none"
                   required
                 />
@@ -235,14 +235,21 @@ export default function HomePage() {
                   />
 
                   <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={monthlyKwh}
-                      onChange={(e) => handleMonthlyKwhChange(e.target.value)}
-                      placeholder="3300 kwh"
-                      className="w-28 rounded-full border border-[#003631]/10 bg-white/10 px-3 py-1 text-sm text-[#003631] outline-none"
-                      inputMode="decimal"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={monthlyKwh}
+                        onChange={(e) => handleMonthlyKwhChange(e.target.value)}
+                        placeholder="3300"
+                        className="w-28 rounded-full border border-[#003631]/10 bg-white/10 px-3 py-1 pr-12 text-sm text-[#003631] outline-none"
+                        inputMode="decimal"
+                      />
+                      {monthlyKwh ? (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#003631]">kWh</span>
+                      ) : (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#003631]/60">kWh</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

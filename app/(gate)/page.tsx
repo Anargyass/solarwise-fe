@@ -22,9 +22,7 @@ export default function GatePage() {
                 Apakah Panel Surya Layak untuk Rumahmu?
               </h1>
               <p className="mt-6 text-balance text-base leading-relaxed sm:text-lg">
-                Masukkan lokasi dan tagihan listrikmu. SolarWise menjalankan engine
-                multi-skenario yang mengevaluasi beberapa kapasitas panel dan memilih
-                skenario terbaik berdasarkan ROI dan coverage.
+                Masukkan lokasi dan tagihan listrikmu untuk melihat estimasi biaya, penghematan, dan potensi ROI solar panel berdasarkan kondisi rumahmu.
               </p>
             </div>
 
@@ -34,7 +32,7 @@ export default function GatePage() {
                 href="/home"
                 className="group relative inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-[#003631] px-8 text-base font-semibold text-[#fff6d1] shadow-lg transition-all hover:-translate-y-1 active:translate-y-0"
               >
-                Cek Kelayakan Sekarang
+                Mulai Analisis
                 <svg
                   className="h-5 w-5 transition-transform group-hover:translate-x-1"
                   fill="none"
@@ -57,9 +55,9 @@ export default function GatePage() {
                     <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
                   </svg>
                 </div>
-                <h3 className="mt-4 text-lg font-bold">Disesuaikan Lokasi</h3>
+                <h3 className="mt-4 text-lg font-bold">Analisis Berdasarkan Lokasi</h3>
                 <p className="mt-2 text-sm text-gray-600">
-                  Data radiasi matahari real NASA untuk potensi energi spesifik di koordinatmu.
+                  Menggunakan data radiasi matahari berbasis lokasi untuk memperkirakan potensi energi surya di rumahmu.
                 </p>
               </article>
 
@@ -71,7 +69,7 @@ export default function GatePage() {
                 </div>
                 <h3 className="mt-4 text-lg font-bold">Estimasi Finansial</h3>
                 <p className="mt-2 text-sm text-gray-600">
-                  Lihat biaya instalasi dan potensi penghematan bulanan secara transparan.
+                  Dapatkan estimasi biaya instalasi, penghematan listrik, dan waktu balik modal secara jelas.
                 </p>
               </article>
 
@@ -81,9 +79,9 @@ export default function GatePage() {
                     <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                   </svg>
                 </div>
-                <h3 className="mt-4 text-lg font-bold">Keputusan Jelas</h3>
+                <h3 className="mt-4 text-lg font-bold">Rekomendasi Kelayakan</h3>
                 <p className="mt-2 text-sm text-gray-600">
-                  Hasil kelayakan yang mudah dipahami untuk membantu investasi Anda.
+                  Hasil analisis disajikan secara sederhana agar lebih mudah digunakan untuk mengambil keputusan.
                 </p>
               </article>
             </div>
@@ -91,16 +89,16 @@ export default function GatePage() {
             {/* Stats Grid */}
             <div className="mt-12 grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
-                <p className="text-xl font-bold">Data Satelit</p>
-                <p className="text-[10px] uppercase font-bold text-gray-400">NASA Power</p>
+                <p className="text-xl font-bold">Data Lokasi</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">NASA POWER</p>
               </div>
               <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
                 <p className="text-xl font-bold">&lt; 5 Detik</p>
                 <p className="text-[10px] uppercase font-bold text-gray-400">Analisis Cepat</p>
               </div>
               <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
-                <p className="text-xl font-bold">Otomatis</p>
-                <p className="text-[10px] uppercase font-bold text-gray-400">Tanpa Rumus</p>
+                <p className="text-xl font-bold">Analisis Instan</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">Simulasi Otomatis</p>
               </div>
               <div className="rounded-xl border border-[#003631]/20 bg-white p-4 text-center">
                 <p className="text-xl font-bold">100% Gratis</p>
