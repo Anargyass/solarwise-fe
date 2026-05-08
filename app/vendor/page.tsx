@@ -274,14 +274,14 @@ function VendorContent() {
             </div>
           </div>
 
-          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          <div className="mt-5 grid gap-6 lg:grid-cols-3">
             {matchedVendors.map((vendor) => (
               <article
                 key={vendor.id}
                 className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#003631]/15 bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="absolute left-0 top-0 h-1 w-full bg-[#003631]/20" />
-                <div className="p-4">
+                <div className="p-6">
                   <div className="flex items-start justify-between gap-2.5">
                     <div>
                       <h3 className="text-sm font-bold leading-snug text-[#003631]">{vendor.name}</h3>
@@ -297,20 +297,20 @@ function VendorContent() {
                     </div>
                   </div>
 
-                  <p className="mt-3 rounded-2xl bg-blue-50 px-3 py-2 text-[9px] leading-relaxed text-blue-900">
+                  <p className="mt-4 rounded-2xl bg-blue-50 px-3 py-2.5 text-[9px] leading-relaxed text-blue-900">
                     {vendor.matchReason}
                   </p>
 
-                  <div className="mt-3.5 grid grid-cols-3 gap-2 text-center">
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2">
+                  <div className="mt-3.5 grid grid-cols-3 gap-2 text-center lg:grid-cols-1 lg:gap-3 lg:text-left">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3 lg:p-3">
                       <p className="text-[8px] font-semibold uppercase text-[#003631]/60">Harga/kWp</p>
                       <p className="mt-1 text-[9px] font-bold leading-snug text-[#003631]">{formatCurrency(vendor.pricePerKwp)}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3 lg:p-3">
                       <p className="text-[8px] font-semibold uppercase text-[#003631]/60">Pengalaman</p>
                       <p className="mt-1 text-[9px] font-bold leading-snug text-[#003631]">{vendor.experience}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-2">
+                    <div className="rounded-2xl border border-[#003631]/10 bg-white p-3 lg:p-3">
                       <p className="text-[8px] font-semibold uppercase text-[#003631]/60">Proyek</p>
                       <p className="mt-1 text-[9px] font-bold leading-snug text-[#003631]">{vendor.projects}+</p>
                     </div>
@@ -324,11 +324,11 @@ function VendorContent() {
                     ))}
                   </div>
 
-                  <div className="mt-4 flex flex-col gap-1.5">
-                    <button className="w-full rounded-xl bg-[#003631] px-4 py-1.5 text-[10px] font-semibold text-[#fff6d1] transition-all hover:opacity-90">
+                  <div className="mt-5 flex flex-col gap-2 lg:gap-3">
+                    <button className="w-full rounded-xl bg-[#003631] px-4 py-2 text-[10px] font-semibold text-[#fff6d1] transition-all hover:opacity-90">
                       Hubungi Vendor
                     </button>
-                    <button className="w-full rounded-xl border-2 border-[#003631] px-4 py-1.5 text-[10px] font-semibold text-[#003631] transition-all hover:bg-[#003631]/5">
+                    <button className="w-full rounded-xl border-2 border-[#003631] px-4 py-2 text-[10px] font-semibold text-[#003631] transition-all hover:bg-[#003631]/5">
                       Lihat Detail
                     </button>
                   </div>
